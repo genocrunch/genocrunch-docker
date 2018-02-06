@@ -116,17 +116,21 @@ $ docker build --rm -t genocrunch .
 ### Run a docker container
 
 Run the docker container with the command below. Make sure to replace `/path/to/genocrunch/storage` with the appropriate path and replace `host.ip.address` by the host ip address.
+This will automatically start the Genocrunch web server which will be accessible in a web browser at <http://localhost:3000> on the host and `host_ip_address:3000` on the network.
 
 ```
 $ cd /path/to/genocrunch
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch
 ```
 
-When used for the first time, initialize the database with `db/schema.rb` and `db/seeds.rb`:
+When used for the first time, initialize the database from within a docker container using `db/schema.rb` and `db/seeds.rb`:
 
 ```
+$ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch bash
+
 # Caution: this will overwrite the current database.
 # For updates, use migrations instead
 $ rails db:schema:load
 $ rails db:seeds
+$ exit
 ```
