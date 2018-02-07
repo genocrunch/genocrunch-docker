@@ -5,6 +5,8 @@ A Dockerfile to run Genocrunch web application on Docker.
 
 ## Resources
 
+- **Git clone URL:** <https://c4science.ch/source/genocrunch_docker.git>
+- **Documentation:** <https://c4science.ch/source/genocrunch_docker>
 - **Genocrunch documentation:** <https://c4science.ch/source/genocrunch-2.1>
 - **Genocrunch official web server:** <https://genocrunch.epfl.ch>
 
