@@ -80,9 +80,11 @@ RUN sed -i 's/info_links:.*$/info_links: [{name: "link_name", href: "link_url", 
 RUN sed -i 's/user_confirmable:.*$/user_confirmable: false/g' config/config.yml
 
 # config/initializers/devise.rb
+...
 RUN sed -i 's/config.mailer_sender =.*$/config.mailer_sender = "app_email@gmail.com"/g' config/initializers/devise.rb
 
 # config/environments/development.rb
+...
 RUN sed -i 's/config.action_mailer.default_url_options =.*$/config.action_mailer.default_url_options = {:host => "localhost:3000"}/g' config/environments/development.rb
 RUN sed -i 's/:address =>.*$/:address => "smtp.gmail.com",/g' config/environments/development.rb
 RUN sed -i 's/:port =>.*$/:port => 587,/g' config/environments/development.rb
@@ -94,17 +96,17 @@ RUN sed -i 's/:enable_starttls_auto =>.*$/:enable_starttls_auto => true/g' confi
 ...
 ```
 
-Edit these line to fit the database name, user and password set previously:
+Edit these lines to fit the database name, user and password set previously:
 
 ```
 #Dockerfile
 
 ...
-# Set the database
+# config/database.yml
 ...
-RUN sed -i 's/username:.*$/username: genocrunch_user/g' config/database.yml
+RUN sed -i 's/^.*username:.*$/  username: genocrunch_user/g' config/database.yml
 RUN sed -i 's/database:.*$/database: genocrunch/g' config/database.yml
-RUN sed -i 's/^.*password:.*$/password: genocrunch_db_password/g' config/database.yml
+RUN sed -i 's/^.*password:.*$/  password: genocrunch_db_password/g' config/database.yml
 ...
 ```
 
@@ -125,7 +127,7 @@ $ cd /path/to/genocrunch
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch
 ```
 
-When used for the first time, initialize the database from within a docker container using `db/schema.rb` and `db/seeds.rb`:
+Complete the installation by initializing the database from within a docker container using `db/schema.rb` and `db/seeds.rb`:
 
 ```
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch bash
