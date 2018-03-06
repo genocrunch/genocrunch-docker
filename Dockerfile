@@ -120,6 +120,9 @@ USER genocrunch_user
 # Install gems
 RUN ~/.rbenv/versions/2.3.1/bin/bundle install
 
+RUN cp ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/jquery.dataTables.js ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/jquery.dataTables.js.bkp
+RUN sed -i -e 's/No data available in table/This table is empty/g' ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/jquery.dataTables.js
+
 # Get versions (print a json file with versions of R packages)
 RUN lib/genocrunch_console/bin/get_version.py
 
