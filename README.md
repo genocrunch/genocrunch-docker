@@ -12,21 +12,27 @@ A Dockerfile to run Genocrunch web application on Docker.
 
 ## Requirements
 
+- **PostgreSQL**
 - **Docker version 17.12.0-ce**
 
-## Installation
+## Installation (on Debian linux)
 
 ### Set the Docker container external resources
 
-To avoid data loses when updating a container, use data storage on the host:
+The genocrunch web application will need to store some data files and to use \
+a database. To avoid data loses when updating a container, you can set both \
+data storage location and database on the host.
+
+Create a new data storage directory that will be used by genocrunch:
 
 ```
-$ mkdir /path/to/genocrunch/storage  # if users data storage location does not exist yet
+$ mkdir /path/to/genocrunch/storage
 ```
 
-Also set a database to be used by the containers:
+Install PostgreSQL and create a new database:
 
 ```
+$ sudo apt-get install postgresql postgresql-contrib
 $ sudo su postgres
 $ psql
 postgres=# create role genocrunch_user with login password 'genocrunch_db_password';
@@ -35,7 +41,8 @@ postgres=# \q
 $ exit
 ```
 
-Allow the docker container to be listened from the database by modifying the `/etc/postgresql/9.?/main/postgresql.conf` file as following:
+Allow the docker container to be listened from the database by modifying the \
+`/etc/postgresql/9.?/main/postgresql.conf` file as following:
 
 ```
 #/etc/postgresql/9.?/main/postgresql.conf 
@@ -61,14 +68,17 @@ $ sudo /etc/init.d/postgresql restart
 
 ### Build the docker image
 
-Set the Dockerfile:
+Download the Dockerfile with git:
 
 ```
-$ cd /path/to/genocrunch
-$ cp Dockerfile.keep Dockerfile
+$ git clone https://c4science.ch/source/genocrunch_docker.git
+$ cd genocrunch_docker
 ```
 
-Edit these lines to set the app email address:
+Set up the genocrunch web app configuration from the Dockefile:
+
+Edit this line to define any custom link to be included in the info menu of \
+the genocrunch web app topbar:
 
 ```
 #Dockerfile
@@ -77,8 +87,26 @@ Edit these lines to set the app email address:
 # config/config.yml
 ...
 RUN sed -i 's/info_links:.*$/info_links: [{name: "link_name", href: "link_url", target: "_blank"}]/g' config/config.yml
-RUN sed -i 's/user_confirmable:.*$/user_confirmable: false/g' config/config.yml
+```
 
+Edit this line to define whether new users will be asked to confirm their \
+email address via a confirmation link or not:
+
+```
+#Dockerfile
+
+...
+# config/config.yml
+...
+RUN sed -i 's/user_confirmable:.*$/user_confirmable: false/g' config/config.yml
+```
+
+Edit these lines to set the email address to be used by the web app:
+
+```
+#Dockerfile
+
+...
 # config/initializers/devise.rb
 ...
 RUN sed -i 's/config.mailer_sender =.*$/config.mailer_sender = "app_email@gmail.com"/g' config/initializers/devise.rb
@@ -110,24 +138,28 @@ RUN sed -i 's/^.*password:.*$/  password: genocrunch_db_password/g' config/datab
 ...
 ```
 
-Finally, build the docker image:
+Finally, build the docker image (you may have to use sudo with this command if \
+docker is not configured to be used as non-root user):
 
 ```
-$ cd /path/to/genocrunch
 $ docker build --rm -t genocrunch .
 ```
 
 ### Run a docker container
 
-Run the docker container with the command below. Make sure to replace `/path/to/genocrunch/storage` with the appropriate path and replace `host.ip.address` by the host ip address.
-This will automatically start the Genocrunch web server which will be accessible in a web browser at <http://localhost:3000> on the host and `host_ip_address:3000` on the network.
+Run the docker container with the command below. Make sure to replace \
+`/path/to/genocrunch/storage` with the appropriate path and replace \
+`host.ip.address` by the host ip address.
+This will automatically start the Genocrunch web server which will be \
+accessible in a web browser at <http://localhost:3000> on the host and `host_ip_address:3000` on the network.
 
 ```
 $ cd /path/to/genocrunch
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch
 ```
 
-Complete the installation by initializing the database from within a docker container using `db/schema.rb` and `db/seeds.rb`:
+Complete the installation by initializing the database from within a docker \
+container using `db/schema.rb` and `db/seeds.rb`:
 
 ```
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch bash
