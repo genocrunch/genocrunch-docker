@@ -10,6 +10,12 @@ A Dockerfile to run Genocrunch web application on Docker.
 - **Genocrunch documentation:** <https://c4science.ch/source/genocrunch-2.1>
 - **Genocrunch official web server:** <https://genocrunch.epfl.ch>
 
+## Rights
+
+- **Copyright:** All rights reserved. ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE, Switzerland, Laboratory of Intestinal Immunology, 2018
+- **Licence:** MIT (See LICENCE.txt for details)
+- **Author:** A Rapin
+
 ## Requirements
 
 - **Docker version 17.12.0-ce**
