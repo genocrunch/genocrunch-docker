@@ -109,8 +109,7 @@ USER genocrunch_user
 WORKDIR /home/genocrunch_user
 RUN source ~/.bashrc \
     && rails new genocrunch -d postgresql -B
-#RUN GIT_CURL_VERBOSE=1 git clone https://git@c4science.ch/source/genocrunch-2.1.git /tmp/genocrunch
-RUN git clone https://git@c4science.ch/source/genocrunch-2.1.git /tmp/genocrunch
+RUN GIT_CURL_VERBOSE=1 git clone https://git@c4science.ch/source/genocrunch-2.1.git /tmp/genocrunch
 WORKDIR /home/genocrunch_user/genocrunch
 RUN rsync -r /tmp/genocrunch/ ./
 RUN rm -r /tmp/genocrunch
