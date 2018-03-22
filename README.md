@@ -13,7 +13,7 @@ A Dockerfile to run Genocrunch web application on Docker.
 ## Rights
 
 - **Copyright:** All rights reserved. ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE, Switzerland, Laboratory of Intestinal Immunology, 2018
-- **Licence:** MIT (See LICENCE.txt for details)
+- **License:** MIT (See LICENSE.txt for details)
 - **Author:** A Rapin
 
 ## Requirements
