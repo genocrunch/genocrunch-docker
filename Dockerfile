@@ -40,23 +40,24 @@ RUN yum install -y git-core \
 # Install rbenv from github
 USER genocrunch_user
 RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-RUN echo 'export PATH="(~/.rbenv/bin:$PATH"' >> ~/.bashrc
-RUN echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> ~/.bashrc
-RUN source ~/.bashrc
+RUN echo 'export PATH="~/.rbenv/bin:$PATH"' >> ~/.bashrc \
+    && echo 'eval "$(~/.rbenv/bin/rbenv init -)"' >> ~/.bashrc
 RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 USER root
 RUN cd /home/genocrunch_user/.rbenv/plugins/ruby-build && ./install.sh
 
 # Install ruby
 USER genocrunch_user
-RUN ~/.rbenv/bin/rbenv install 2.3.1
-RUN ~/.rbenv/bin/rbenv global 2.3.1
+RUN source ~/.bashrc \
+  && rbenv install 2.3.1 \
+  && rbenv global 2.3.1
 
 # Install rails
 RUN echo "gem: --no-document" > ~/.gemrc
-RUN ~/.rbenv/shims/gem install bundler
-RUN ~/.rbenv/shims/gem install rails -v 5.0.1
-RUN ~/.rbenv/bin/rbenv rehash
+RUN source ~/.bashrc \
+    && gem install bundler \
+    && gem install rails -v 5.0.1 \
+    && rbenv rehash
 RUN echo 'export PATH="~/.rbenv/versions/2.3.1/bin:$PATH"' >> .bashrc
 
 # INSTALL POSTGRESQL
@@ -106,9 +107,11 @@ USER genocrunch_user
 
 # Create a new Rails project
 WORKDIR /home/genocrunch_user
-RUN ~/.rbenv/versions/2.3.1/bin/rails new genocrunch -d postgresql -B
+RUN source ~/.bashrc \
+    && rails new genocrunch -d postgresql -B
+#RUN GIT_CURL_VERBOSE=1 git clone https://git@c4science.ch/source/genocrunch-2.1.git /tmp/genocrunch
+RUN git clone https://git@c4science.ch/source/genocrunch-2.1.git /tmp/genocrunch
 WORKDIR /home/genocrunch_user/genocrunch
-RUN GIT_CURL_VERBOSE=1 git clone https://git@c4science.ch/source/genocrunch-2.1.git /tmp/genocrunch
 RUN rsync -r /tmp/genocrunch/ ./
 RUN rm -r /tmp/genocrunch
 
@@ -118,10 +121,11 @@ RUN chmod 755 install.sh && ./install.sh
 USER genocrunch_user
 
 # Install gems
-RUN ~/.rbenv/versions/2.3.1/bin/bundle install
-
-RUN cp ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/jquery.dataTables.js ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/jquery.dataTables.js.bkp
-RUN sed -i -e 's/No data available in table/This table is empty/g' ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/jquery.dataTables.js
+RUN source ~/.bashrc \
+    && ~/.rbenv/versions/2.3.1/bin/bundle install
+RUN table_fp=$(cd ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/ && pwd) \
+    && cp "${table_fp}"/jquery.dataTables.js "${table_fp}"/jquery.dataTables.js.bkp \
+    && sed -i -e 's/No data available in table/This table is empty/g' "${table_fp}"/jquery.dataTables.js
 
 # Get versions (print a json file with versions of R packages)
 RUN lib/genocrunch_console/bin/get_version.py
@@ -162,4 +166,5 @@ RUN sed -i 's/^.*host:.*$/  host: hostaddress/g' config/database.yml
 RUN cp db/seeds.rb.keep db/seeds.rb
 
 # Run Genocrunch
-CMD source /home/genocrunch_user/.bashrc && RAILS_ENV=development ruby bin/delayed_job -n 2 start; /home/genocrunch_user/genocrunch/bin/rails server
+CMD source ~/.bashrc \
+    && RAILS_ENV=development ruby bin/delayed_job -n 2 start; /home/genocrunch_user/genocrunch/bin/rails server
