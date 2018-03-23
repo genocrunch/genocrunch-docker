@@ -115,9 +115,9 @@ RUN rsync -r /tmp/genocrunch/ ./
 RUN rm -r /tmp/genocrunch
 
 # Install R/python scripts
-USER root
-RUN chmod 755 install.sh && ./install.sh
-USER genocrunch_user
+#USER root
+#RUN chmod 755 install.sh && ./install.sh
+#USER genocrunch_user
 
 # Install gems
 RUN source ~/.bashrc \
