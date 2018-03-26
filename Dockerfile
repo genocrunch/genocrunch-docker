@@ -115,13 +115,11 @@ RUN rsync -r /tmp/genocrunch/ ./
 RUN rm -r /tmp/genocrunch
 
 # Install R/python scripts
-#USER root
 #RUN chmod 755 install.sh && ./install.sh
-#USER genocrunch_user
 
 # Install gems
 RUN source ~/.bashrc \
-    && ~/.rbenv/versions/2.3.1/bin/bundle install
+    && bundle install
 RUN table_fp=$(cd ~/.rbenv/versions/*/lib/ruby/gems/*/gems/jquery-datatables-rails-*/app/assets/javascripts/dataTables/ && pwd) \
     && cp "${table_fp}"/jquery.dataTables.js "${table_fp}"/jquery.dataTables.js.bkp \
     && sed -i -e 's/No data available in table/This table is empty/g' "${table_fp}"/jquery.dataTables.js

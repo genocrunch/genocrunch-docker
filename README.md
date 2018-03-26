@@ -171,3 +171,5 @@ This will automatically start the Genocrunch web server which will be accessible
 ```
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch
 ```
+
+Note: Avoid using the same data storage directory and database for apps running on docker containers and apps running directly on the host (especially if the usernames and main directory paths are not matching).
