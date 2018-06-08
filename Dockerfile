@@ -80,11 +80,11 @@ RUN yum -y install postgresql \
 RUN yum install -y R-core \
     R-base \
     R-devel \
-    libcurl-devel
+    libcurl-devel \
+    libxml2-devel
 
 # Install R packages
-RUN yum install -y libxml2-devel
-RUN echo "options(repos=structure(c(CRAN='https://cran.uib.no')))" >> .Rprofile
+RUN echo "options(repos=structure(c(CRAN='https://stat.ethz.ch/CRAN')))" >> .Rprofile
 RUN echo ".libPaths('/usr/share/R/library')" >> .Rprofile
 RUN Rscript -e "install.packages('ineq')"
 RUN Rscript -e "install.packages('rjson')"
@@ -137,6 +137,9 @@ RUN cp config/config.yml.keep config/config.yml
 RUN sed -i 's/data_dir:.*$/data_dir: \/home\/genocrunch_user\/genocrunch/g' config/config.yml
 RUN sed -i 's/info_links:.*$/info_links: []/g' config/config.yml
 RUN sed -i 's/user_confirmable:.*$/user_confirmable: false/g' config/config.yml
+RUN sed -i 's/archive_format:.*$/archive_format: zip/g' config/config.yml
+RUN sed -i 's/max_sandbox_job_age:.*$/max_sandbox_job_age: 2/g' config/config.yml
+RUN sed -i 's/max_job_age:.*$/max_job_age: 365/g' config/config.yml
 
 # config/initializers/devise.rb
 RUN cp config/initializers/devise.rb.keep config/initializers/devise.rb
@@ -165,3 +168,4 @@ RUN cp db/seeds.rb.keep db/seeds.rb
 # Run Genocrunch
 CMD source ~/.bashrc \
     && RAILS_ENV=development ruby bin/delayed_job -n 2 start; /home/genocrunch_user/genocrunch/bin/rails server
+

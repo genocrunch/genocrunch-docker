@@ -26,7 +26,7 @@ Note: you may have to use `sudo` with docker commands if docker is not configure
 
 ### Set the Docker container external resources
 
-The Genocrunch web application will need to store some data files and to use a database. To avoid data loses when updating a container, you can set both data storage location and database on the host (as opposed to on the docker container itself).
+The Genocrunch web application will need to store some data files and to use a database. To avoid data loses when updating a container, you can set both data storage location and database on the host (as opposed to set it up on the docker container itself).
 
 First, create a new data storage directory on the host side. This directory will be used by the Genocrunch web app running on the docker container:
 
@@ -81,6 +81,17 @@ $ git clone https://c4science.ch/source/genocrunch_docker.git
 Before building a docker image using the Dockerfile, you may want to edit the Dockerfile in order to customize the installation of the Genocrunch web app.
 For this, open `genocrunch_docker/Dockerfile` with your favorite editor and follow the following instructions:
 
+
+Edit this line to define the CRAN mirror from which to download R packages:
+
+```
+#Dockerfile
+
+...
+RUN echo "options(repos=structure(c(CRAN='https://stat.ethz.ch/CRAN')))" >> .Rprofile
+...
+```
+
 Edit this line to define any custom link to be included in the info menu of the Genocrunch web app topbar:
 
 ```
@@ -90,6 +101,7 @@ Edit this line to define any custom link to be included in the info menu of the 
 # config/config.yml
 ...
 RUN sed -i 's/info_links:.*$/info_links: [{name: "link_name", href: "link_url", target: "_blank"}]/g' config/config.yml
+...
 ```
 
 Edit this line to define whether new users will be asked to confirm their email address via a confirmation link or not:
@@ -101,6 +113,7 @@ Edit this line to define whether new users will be asked to confirm their email 
 # config/config.yml
 ...
 RUN sed -i 's/user_confirmable:.*$/user_confirmable: false/g' config/config.yml
+...
 ```
 
 Edit these lines to set the email address to be used by the web app:
@@ -155,7 +168,7 @@ Caution: this will overwrite the database and should be applied only for initial
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch bash
 $ rails db:schema:load
 
-# To change default guest and admin passwords and emails, edit the `User.create` query in the db/seeds.rb file with nano:
+# To change default guest and admin passwords, emails and storage quotas, edit the `User.create` query in the db/seeds.rb file with nano:
 $ nano db/seeds.rb
 
 # Finally, seed the database:
@@ -172,4 +185,3 @@ This will automatically start the Genocrunch web server which will be accessible
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch
 ```
 
-Note: Avoid using the same data storage directory and database for apps running on docker containers and apps running directly on the host (especially if the usernames and main directory paths are not matching).
