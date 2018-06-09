@@ -5,8 +5,8 @@ A Dockerfile to run Genocrunch web application on Docker.
 
 ## Resources
 
-- **Git clone URL:** <https://c4science.ch/source/genocrunch_docker.git>
-- **Documentation:** <https://c4science.ch/source/genocrunch_docker>
+- **Git clone URL:** <https://github.com/genocrunch/genocrunch_docker.git>
+- **Documentation:** <https://github.com/genocrunch/genocrunch_docker>
 - **Genocrunch documentation:** <https://c4science.ch/source/genocrunch-2.1>
 - **Genocrunch official web server:** <https://genocrunch.epfl.ch>
 
@@ -75,7 +75,7 @@ $ sudo /etc/init.d/postgresql restart
 First, download the Dockerfile from its git repository:
 
 ```
-$ git clone https://c4science.ch/source/genocrunch_docker.git
+$ git clone https://github.com/genocrunch/genocrunch_docker.git
 ```
 
 Before building a docker image using the Dockerfile, you may want to edit the Dockerfile in order to customize the installation of the Genocrunch web app.
