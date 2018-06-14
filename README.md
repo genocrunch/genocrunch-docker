@@ -93,7 +93,7 @@ RUN echo "options(repos=structure(c(CRAN='https://stat.ethz.ch/CRAN')))" >> .Rpr
 ...
 ```
 
-Edit this line to define any custom link to be included in the info menu of the Genocrunch web app topbar:
+Edit these lines to set the application configuration variables:
 
 ```
 #Dockerfile
@@ -101,7 +101,20 @@ Edit this line to define any custom link to be included in the info menu of the 
 ...
 # config/config.yml
 ...
+  # Additional link(s) that should be included in the Infos menu of the topbar (set to [] to ignore)
 RUN sed -i 's/info_links:.*$/info_links: [{name: "link_name", href: "link_url", target: "_blank"}]/g' config/config.yml
+  # Webmaster email
+RUN sed -i 's/webmaster_email:.*$/webmaster_email: webmaster_email/g' config/config.yml
+  # Google analytics tag (set to "" to ignore)
+RUN sed -i 's/gtag_id:.*$/gtag_id: your_google_analytics_tag_id/g' config/config.yml
+  # Send a validation link to user email to confirm registration?
+RUN sed -i 's/user_confirmable:.*$/user_confirmable: false/g' config/config.yml
+  # Compressed archive format for downloading an archive of analysis files. Valid choices are zip or tar.gz
+RUN sed -i 's/archive_format:.*$/archive_format: zip/g' config/config.yml
+  # Max time without update for a job owned by a guest user not to be automatically deleted by the 'cleanup' rake task (in days)
+RUN sed -i 's/max_sandbox_job_age:.*$/max_sandbox_job_age: 2/g' config/config.yml
+  # Max time without update for a job owned by a registered user not to be automatically deleted by the 'cleanup' rake task (in days)
+RUN sed -i 's/max_job_age:.*$/max_job_age: 365/g' config/config.yml
 ...
 ```
 
