@@ -174,6 +174,9 @@ RUN sed -i 's/^.*host:.*$/  host: hostaddress/g' config/database.yml
 
 RUN cp db/seeds.rb.keep db/seeds.rb
 
+# Terms of service
+RUN cp public/app/TERMS_OF_SERVICE.txt.keep public/app/TERMS_OF_SERVICE.txt
+
 # Run Genocrunch
 CMD source ~/.bashrc \
     && RAILS_ENV=development ruby bin/delayed_job -n 2 start; /home/genocrunch_user/genocrunch/bin/rails server
