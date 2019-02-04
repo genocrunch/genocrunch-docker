@@ -1,0 +1,35 @@
+development:
+  # Genocrunch main directory
+  data_dir: /home/genocrunch_user/genocrunch
+
+  # Additional link(s) that should be included in the Infos menu of the topbar (set to [] to ignore)
+  # format must look like: [{name: 'link_name_1', href: 'link_url_1', target: '_blank'}, {name: 'link_name_2', href: 'link_url_2', target: '_blank'}]
+  info_links: [{name: 'link_name_1', href: 'link_url_1', target: '_blank'}]
+
+  # Webmaster email
+  webmaster_email: webmaster_email
+
+  # Google analytics tag (set to "" to ignore)
+  gtag_id: ""
+
+  # Send a validation link to user email to confirm registration?
+  user_confirmable: false
+
+  # Compressed archive format for downloading an archive of analysis files. Valid choices are zip or tar.gz
+  archive_format: zip
+
+  # Max time without update for a job owned by a guest user not to be automatically deleted by the 'cleanup' rake task (in days)
+  max_sandbox_job_age: 2
+
+  # Max time without update for a job owned by a registered user not to be automatically deleted by the 'cleanup' rake task (in days)
+  max_job_age: 365
+
+production:
+  data_dir: /home/genocrunch_user/genocrunch
+  info_links: []
+  webmaster_email: webmaster_email
+  gtag_id: ""
+  user_confirmable: false
+  archive_format: zip
+  max_sandbox_job_age: 2
+  max_job_age: 365
