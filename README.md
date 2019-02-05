@@ -5,11 +5,11 @@ A Dockerfile to run Genocrunch web application on Docker.
 
 ## Resources
 
-- **Git clone URL:** <https://github.com/genocrunch/genocrunch-docker.git>
-- **Documentation:** <https://github.com/genocrunch/genocrunch-docker>
-- **Docker image** <https://hub.docker.com/r/genocrunch/genocrunch-docker>
-- **Genocrunch documentation:** <https://github.com/genocrunch/genocrunch>
-- **Genocrunch official web site:** <https://genocrunch.epfl.ch>
+- **Git clone URL:** https://github.com/genocrunch/genocrunch-docker.git
+- **Documentation:** https://github.com/genocrunch/genocrunch-docker
+- **Docker image** https://hub.docker.com/r/genocrunch/genocrunch-docker
+- **Genocrunch documentation:** https://github.com/genocrunch/genocrunch
+- **Genocrunch official web site:** https://genocrunch.epfl.ch
 
 ## Rights
 
@@ -214,3 +214,6 @@ This will automatically start the Genocrunch web server which will be accessible
 $ docker run -v /path/to/genocrunch/storage:/home/genocrunch_user/genocrunch/users -p 3000:3000 --add-host=hostaddress:host.ip.address -it genocrunch/genocrunch-docker
 ```
 
+## Contributing
+
+Thank you for your interest in contributing. Get started [here](https://github.com/genocrunch/genocrunch-docker/CONTRIBUTING.md).
